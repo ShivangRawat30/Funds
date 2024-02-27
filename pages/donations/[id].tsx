@@ -3,13 +3,16 @@ import Details from '@/components/Details'
 import Supports from '@/components/Supports'
 import NavBtn from '@/components/NavBtn'
 import Payment from '@/components/Payment'
-import { CharityStruct, SupportStruct } from '@/utils/type.dt'
+import { CharityStruct, RootState, SupportStruct } from '@/utils/type.dt'
 import { GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Donor from '@/components/Donor'
 import Ban from '@/components/Ban'
 import { generateCharities, generateSupports } from '@/utils/fakeData'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { globalActions } from '@/store/globalSlices'
 
 interface PageProps {
   charityData: CharityStruct
@@ -18,11 +21,17 @@ interface PageProps {
 }
 
 const Page: NextPage<PageProps> = ({ charityData, supportsData, owner }) => {
-  const charity = charityData
-  const supports = supportsData
+  const {charity, supports} = useSelector((states: RootState) => states.globalStates)
+  const dispatch = useDispatch();
+  const {setCharity, setSupports} = globalActions
 
   const router = useRouter()
   const { id } = router.query
+
+  useEffect(() => {
+    dispatch(setCharity(charityData))
+    dispatch(setSupports(supportsData))
+  }, [dispatch, setCharity, charityData, setSupports, supportsData])
 
   return (
     <div>
@@ -41,7 +50,7 @@ const Page: NextPage<PageProps> = ({ charityData, supportsData, owner }) => {
           lg:w-2/3 w-full mx-auto space-y-4 sm:space-y-0 sm:space-x-10 my-10 px-8 sm:px-0"
         >
           <Details supports={supports} charity={charity} />
-          <Payment owner={owner} supports={supports.slice(0, 4)} charity={charity} />
+          <Payment supports={supports.slice(0, 4)} charity={charity} />
         </div>
       )}
 

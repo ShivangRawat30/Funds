@@ -12,12 +12,12 @@ const Footer: React.FC = () => {
         justify-items-start items-start"
           >
             <Link
-              className="text-sm font-semibold leading-relaxed text-green-600
+              className="text-sm font-semibold leading-relaxed text-[#a75891]
             flex justify-start items-center py-2 whitespace-no-wrap uppercase"
               href="/"
             >
               <MdSunnySnowing size={25} />
-              <span>Dapp Funds</span>
+              <span>OpenArms</span>
             </Link>
 
             <div className="space-y-2">

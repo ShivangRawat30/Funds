@@ -139,7 +139,7 @@ const Page: NextPage = () => {
                 />
               </div>
 
-              <div className="flex justify-between items-center rounded-xl p-2 w-full border border-gray-300">
+              {/* <div className="flex justify-between items-center rounded-xl p-2 w-full border border-gray-300">
                 <input
                   className="block w-full text-sm text-slate-500 bg-transparent
                   border-0 focus:outline-none focus:ring-0"
@@ -150,7 +150,7 @@ const Page: NextPage = () => {
                   value={charity.profile}
                   onChange={handleChange}
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="flex justify-between items-center rounded-xl p-2 w-full border border-gray-300">
@@ -167,9 +167,9 @@ const Page: NextPage = () => {
 
             <div className="">
               <button
-                className="text-white text-md bg-green-600 py-3 px-8 rounded-full
-                drop-shadow-xl border border-transparent hover:bg-transparent hover:border-green-600
-                hover:text-green-600 focus:outline-none mt-5"
+                className="text-white text-md bg-[#a75891] py-3 px-8 rounded-full
+                drop-shadow-xl border border-transparent hover:bg-transparent hover:border-[#a75891]
+                hover:text-[#a75891] focus:outline-none mt-5"
               >
                 Create & List
               </button>

@@ -1,7 +1,7 @@
 import React from 'react'
 import ConnectBtn from './ConnectBtn'
 import Link from 'next/link'
-import { MdSunnySnowing } from 'react-icons/md'
+import { FaHandsHelping } from "react-icons/fa";
 
 const Header: React.FC = () => {
   return (
@@ -16,12 +16,12 @@ const Header: React.FC = () => {
         >
           <div className="w-full relative flex justify-between px-4 lg:static">
             <Link
-              className="text-sm font-semibold leading-relaxed text-green-600
+              className="text-sm font-semibold leading-relaxed text-[#a75891]
             flex justify-start items-center py-2 whitespace-no-wrap uppercase"
-              href="/"
+              href="/Home"
             >
-              <MdSunnySnowing size={25} />
-              <span className='hidden sm:flex'>Dapp Funds</span>
+              <FaHandsHelping size={25} />
+              <span className='hidden sm:flex ml-5'>OpenArms</span>
             </Link>
 
             <ConnectBtn />

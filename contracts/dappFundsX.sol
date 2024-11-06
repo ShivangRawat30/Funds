@@ -1,44 +1,35 @@
 //SPDX-License-Identifier: MIT
-pragma solidity >= 0.7.0 <0.9.0;
+pragma solidity ^0.8.4;
 
-import '@openzeppelin/contracts/access/Ownable.sol';
-import '@openzeppelin/contracts/utils/Counters.sol';
 
-contract DappFundX is Ownable {
-    using Counters for Counters.Counter;
-    Counters.Counter private _totalCharities;
-    Counters.Counter private _totalDonation;
+contract DappFundX  {
+    uint256 private _totalCharities;
+    uint256 private _totalDonation;
+    address public owner;
 
     uint256 public charityTax;
 
     mapping(uint256 => CharityStruct) charities;
     mapping(uint256 => SupportsStruct[]) supportersOf;
-    mapping(uint256 => bool) public charityExists;
+    mapping(address => UserStruct) cid;
 
     struct CharityStruct {
+        string cid;
         uint256 id;
         address owner;
-        string name;
-        string fullname;
-        string description;
-        string image;
-        string profile;
         uint256 amount;
         uint256 donations;
-        uint256 raised;
-        uint256 timestamp;
-        bool deleted;
-        bool banned;
     }
 
     struct SupportsStruct {
         uint256 id;
-        uint256 cid;
-        string fullname;
         uint256 amount;
-        uint256 timestamp;
-        string comment;
         address supporter;
+    }
+
+    struct UserStruct {
+        string cid;
+        bool verified;
     }
 
     constructor(uint256 _charityTax){
@@ -46,98 +37,63 @@ contract DappFundX is Ownable {
     }
 
     function createCharity(
-        string memory name,
-        string memory fullname,
-        string memory profile,
-        string memory description,
-        string memory image,
+        string memory _cid,
         uint256 amount
     ) public {
-        require(bytes(name).length > 0, 'Name cannot be empty');
-        require(bytes(fullname).length > 0, 'Fullname cannot be empty');
-        require(bytes(description).length > 0, 'Description cannot be empty');
-        require(bytes(profile).length > 0, 'Profile cannot be empty');
-        require(bytes(image).length > 0, 'Image cannot be empty');
+        require(cid[msg.sender].verified == true, 'Please Verify your personhood before creating a charity'); 
         require(amount > 0 ether, 'Amount cannot be zero');
 
-        _totalCharities.increment();
+        _totalCharities++;
         CharityStruct memory charity;
-        charity.id = _totalCharities.current();
+        charity.id = _totalCharities;
         charity.owner = msg.sender;
-        charity.name = name;
-        charity.fullname = fullname;
-        charity.description = description;
-        charity.image = image;
-        charity.profile = profile;
+        charity.cid = _cid;
         charity.amount = amount;
-        charity.timestamp = currentTime();
 
         charities[charity.id] = charity;
-        charityExists[charity.id] = true;
+    }
+
+    function createUser(
+        string memory _cid
+    ) public {
+        cid[msg.sender] = UserStruct({
+            cid: _cid,
+            verified: false
+        });
     }
 
     function updateCharity(
         uint256 id,
-        string memory name,
-        string memory fullname,
-        string memory profile,
-        string memory description,
-        string memory image,
+        string memory _cid,
         uint256 amount
     ) public {
-        require(charityExists[id], 'Charity Not Found');
+        require(charities[id].owner != address(0), 'Charity Not Found');
         require(msg.sender == charities[id].owner, 'Unauthorized Entity');
-        require(bytes(name).length > 0, 'Name cannot be empty');
-        require(bytes(fullname).length > 0, 'Full name cannot be empty');
-        require(bytes(description).length > 0, 'Description cannot be empty');
-        require(bytes(profile).length > 0, 'Image cannot be empty');
         require(amount > 0 ether, 'Amount cannot be zero');
 
-        charities[id].name = name;
-        charities[id].fullname = fullname;
-        charities[id].description = description;
-        charities[id].image = image;
         charities[id].amount = amount;
+        charities[id].cid = _cid;
     }
 
-    function deleteCharity(uint256 id) public {
-        require(charityExists[id], 'Charity Not Found');
-        require(msg.sender == charities[id].owner, 'Unauthorized Entity');
-
-        charities[id].deleted = true;
-    }
-
-    function toggleBan(uint256 id) public onlyOwner{
-        require(charityExists[id], 'Charity Not Found');
-        charities[id].banned  = !charities[id].banned;
-    }
 
     function getCharity(uint256 id) public view returns (CharityStruct memory) {
         return charities[id];
     }
 
     function getCharities() public view returns (CharityStruct[] memory Charities) {
-        uint256 available;
-        for(uint i = 1; i<= _totalCharities.current(); i++){
-            if(!charities[i].deleted && !charities[i].banned) {
-                available++;
-            }
-        }
 
-        Charities = new CharityStruct[](available);
+        Charities = new CharityStruct[](_totalCharities);
 
         uint256 index;
-        for(uint i=1; i<= _totalCharities.current(); i++) {
-            if(!charities[i].deleted && !charities[i].banned){
-                Charities[index++] = charities[i];
-            }
+        for(uint i=1; i<= _totalCharities; i++) {
+            Charities[index++] = charities[i];
         }
     }
 
     function getMyCharities() public view returns (CharityStruct[] memory Charities) {
         uint256 available;
-        for(uint i=1; i<= _totalCharities.current(); i++){
-            if(!charities[i].deleted && !charities[i].banned && charities[i].owner == msg.sender) {
+        for(uint i=1; i<= _totalCharities; i++){
+            if(charities[i].owner == msg.sender) {
                 available++;
             }
         }
@@ -145,45 +101,39 @@ contract DappFundX is Ownable {
         Charities = new CharityStruct[](available);
 
         uint256 index;
-        for(uint i = 1; i <= _totalCharities.current(); i++){
-            if(!charities[i].deleted && !charities[i].banned && charities[i].owner == msg.sender) {
+        for(uint i = 1; i <= _totalCharities; i++){
+            if(charities[i].owner == msg.sender) {
                 Charities[index++] = charities[i];
             }
         }
     }
 
-    function donate(uint256 id, string memory fullname, string memory comment) public payable {
-        require(charityExists[id], 'Charity Not Found');
-        require(!charities[id].banned, 'Charity Banned, contact admin');
+    function donate(uint256 id) public payable {
+        require(charities[id].owner != address(0), 'Charity Not Found');
         require(msg.value > 0 ether, 'Donation cannot be zero');
-        require(charities[id].raised < charities[id].amount, 'Charity budget fulfilled');
+        require(charities[id].donations < charities[id].amount, 'Charity budget fulfilled');
 
-        _totalDonation.increment();
+        _totalDonation++;
         SupportsStruct memory support;
-        support.id = _totalDonation.current();
-        support.cid = id;
-        support.fullname = fullname;
+        support.id = _totalDonation;
         support.supporter = msg.sender;
         support.amount = msg.value;
-        support.comment = comment;
-        support.timestamp = currentTime();
 
         supportersOf[id].push(support);
-        charities[id].raised += msg.value;
-        charities[id].donations += 1;
+        charities[id].donations += msg.value;
 
         uint256 fee = (msg.value * charityTax) / 100;
         uint256 payment = msg.value - fee;
 
         payTo(charities[id].owner, payment);
-        payTo(owner(), fee);
+        payTo(owner, fee);
     }
 
     function getSupporters(uint256 id) public view returns (SupportsStruct[] memory){
         return supportersOf[id];
     }
 
-    function changeTax(uint256 _taxPct) public onlyOwner {
+    function changeTax(uint256 _taxPct) public {
         require(_taxPct > 0 && _taxPct <= 100, 'Percent must be between 1 - 100');
         charityTax = _taxPct;
     }
@@ -195,5 +145,9 @@ contract DappFundX is Ownable {
     function payTo(address to, uint256 amount) internal {
         (bool success, ) = payable(to).call{value: amount}('');
         require(success);
+    }
+
+    function getUser() external view returns (UserStruct memory) {
+        return cid[msg.sender];
     }
 }

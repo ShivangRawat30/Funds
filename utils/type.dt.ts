@@ -23,35 +23,29 @@ export interface CharityParams {
 }
 
 export interface CharityStruct {
+  cid: string
   id: number
-  image: string
-  fullname: string
-  name: string
-  profile: string
-  description: string
-  timestamp: number
-  donations: number
-  raised: number
-  amount: number
   owner: string
-  deleted: boolean
-  banned: boolean
+  amount: number
+  donations: number
 }
 
 export interface SupportStruct {
   id: number
-  cid: number
-  fullname: string
   amount: number
-  timestamp: number
-  comment: string
   supporter: string
+}
+
+export interface UserStruct{
+  cid: string
+  verified: boolean
 }
 
 export interface GlobalState {
   charities: CharityStruct[]
   charity: CharityStruct | null
   supports: SupportStruct[]
+  user: UserStruct | null
   deleteModal: string
   donorsModal: string
   supportModal: string

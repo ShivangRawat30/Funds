@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <div className="min-h-screen relative">
           <Header />
           <Component {...pageProps} />
-          <Footer />
+          {/* <Footer /> */}
           <ToastContainer
             position="bottom-center"
             autoClose={5000}

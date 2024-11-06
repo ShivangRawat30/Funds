@@ -24,15 +24,15 @@ const Payment: React.FC<ComponentProp> = ({ charity, supports }) => {
         <div className="flex items-end space-x-2 mb-4">
           <h4 className="text-4xl flex justify-start items-center space-x-1">
             <FaEthereum />
-            <span>{charity.raised.toFixed(2)}</span>
+            <span>{charity.donations.toFixed(2)}</span>
           </h4>
           <span className="text-gray-600">raised of {charity.amount.toFixed(2)} ETH target</span>
         </div>
 
         <div className="h-1 bg-gray-300 rounded-full mb-2">
           <div
-            className="h-full overflow-hidden bg-green-600 rounded-full"
-            style={{ width: `${(charity.raised / charity.amount) * 100}%` }}
+            className="h-full overflow-hidden bg-[#a75891] rounded-full"
+            style={{ width: `${(1 / charity.amount) * 100}%` }}
           />
         </div>
 
@@ -47,7 +47,6 @@ const Payment: React.FC<ComponentProp> = ({ charity, supports }) => {
         >
           Share
         </button>
-        {!charity.banned ? (
           <button
             className="bg-amber-500 py-3 px-20 rounded-xl
           transition-all duration-300 ease-in-out
@@ -55,16 +54,6 @@ const Payment: React.FC<ComponentProp> = ({ charity, supports }) => {
           >
             Donate now
           </button>
-        ) : (
-          <button
-            className="border border-amber-500 py-3 px-20 rounded-xl
-          transition-all duration-300 ease-in-out flex justify-center
-          hover:border-amber-400 hover:bg-red-100 items-center space-x-2"
-          >
-            <span>Banned</span>
-            <FaBan size={20} className="text-red-700 " />
-          </button>
-        )}
       </div>
 
       <div className="flex flex-col space-y-10">

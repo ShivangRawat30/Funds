@@ -1,0 +1,42 @@
+{
+    "fullName": "John Doe",
+    "dateOfBirth": "1985-06-15",
+    "gender": "Male",
+    "nationality": "Syrian",
+    "familyMembers": [
+      {
+        "name": "Jane Doe",
+        "age": 35,
+        "relationship": "Spouse"
+      },
+      {
+        "name": "Sam Doe",
+        "age": 10,
+        "relationship": "Child"
+      }
+    ],
+    "address": "Temporary Shelter, Zone A",
+    "contactNumber": "+123456789",
+    "displacementDetails": {
+      "reason": "Conflict",
+      "date": "2023-08-01",
+      "route": "Home to neighboring country, through land border"
+    },
+    "legalDocuments": [
+      {
+        "documentType": "Passport",
+        "documentNumber": "A12345678",
+        "expiryDate": "2025-12-31"
+      }
+    ],
+    "healthInfo": {
+      "medicalConditions": ["Diabetes"],
+      "vaccinationStatus": "Up to date"
+    },
+    "education": "Bachelor's Degree in Engineering",
+    "skills": ["Carpentry", "Basic Plumbing"],
+    "languages": ["Arabic", "English"],
+    "vulnerabilities": "Requires regular insulin for diabetes",
+    "consent": true
+  }
+  

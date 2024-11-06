@@ -153,9 +153,9 @@ const Page: NextPage<{ charityData: CharityStruct }> = ({ charityData }) => {
 
             <div className="">
               <button
-                className="text-white text-md bg-green-600 py-3 px-8 rounded-full
-                drop-shadow-xl border border-transparent hover:bg-transparent hover:border-green-600
-                hover:text-green-600 focus:outline-none mt-5"
+                className="text-white text-md bg-[#a75891] py-3 px-8 rounded-full
+                drop-shadow-xl border border-transparent hover:bg-transparent hover:border-[#a75891]
+                hover:text-[#a75891] focus:outline-none mt-5"
               >
                 Update Data
               </button>

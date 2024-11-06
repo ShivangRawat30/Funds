@@ -1,34 +1,28 @@
 import Banner from '@/components/Banner'
 import Cards from '@/components/Cards'
 import NavBtn from '@/components/NavBtn'
+import Quote from '@/components/Quote'
+import Start from '@/components/Start'
 import { getCharities } from '@/services/blockchain'
 import { generateCharities } from '@/utils/fakeData'
 import { CharityStruct } from '@/utils/type.dt'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
 
-const Page: NextPage = () => {
-  const [charities, setCharities] = useState<CharityStruct[] | null>(null)
-
-  useEffect(() => {
-    const fetchCharities = async () => {
-      const charitiesData: CharityStruct[] = getCharities
-      setCharities(charitiesData)
-    }
-
-    fetchCharities()
-  }, [])
-
+const Page: NextPage<{ charitiesData: CharityStruct[] }> = ({ charitiesData }) => {
   return (
     <div>
       <Head>
         <title>Charity Tracker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Banner mine />
+      <Banner />
       <div className="h-10"></div>
-      {charities && <Cards charities={charities} />}
+      <Cards charities={charitiesData} />
+      <div className="h-10"></div>
+      <Quote />
+      <div className="h-10"></div>
+      <Start />
       <div className="h-10"></div>
       <NavBtn />
     </div>
@@ -36,3 +30,10 @@ const Page: NextPage = () => {
 }
 
 export default Page
+
+export const getServerSideProps = async () => {
+  const charitiesData: CharityStruct[] = await getCharities();
+  return {
+    props: { charitiesData: JSON.parse(JSON.stringify(charitiesData)) },
+  }
+}

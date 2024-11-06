@@ -39,7 +39,7 @@ const getAdmin = async (): Promise<string> => {
 
 const getCharities = async (): Promise<CharityStruct[]> => {
   const contract = await getEthereumContracts()
-  const charities = await contract.getcharities()
+  const charities = await contract.getCharities()
   return structuredCharities(charities)
 }
 
@@ -85,6 +85,8 @@ const createCharity = async (charity: CharityParams): Promise<void> => {
     return Promise.reject(error)
   }
 }
+
+
 
 const updateCharity = async (charity: CharityParams): Promise<void> => {
   if (!ethereum) {
@@ -178,33 +180,19 @@ const structuredCharities = (charities: CharityStruct[]): CharityStruct[] =>
   charities
     .map((charity) => ({
       id: Number(charity.id),
-      name: charity.name,
-      fullname: charity.fullname,
-      image: charity.image,
-      profile: charity.profile,
+      cid: (charity.cid),
       donations: Number(charity.donations),
-      raised: parseFloat(fromWei(charity.raised)),
       amount: parseFloat(fromWei(charity.amount)),
       owner: charity.owner,
-      description: charity.description,
-      timestamp: Number(charity.timestamp),
-      deleted: charity.deleted,
-      banned: charity.banned,
     }))
-    .sort((a, b) => b.timestamp - a.timestamp)
 
 const structuredSupporters = (supports: SupportStruct[]): SupportStruct[] =>
   supports
     .map((support) => ({
       id: Number(support.id),
-      cid: Number(support.cid),
-      fullname: support.fullname,
       amount: parseFloat(fromWei(support.amount)),
       supporter: support.supporter,
-      comment: support.comment,
-      timestamp: Number(support.timestamp),
     }))
-    .sort((a, b) => b.timestamp - a.timestamp)
 
 
 export {

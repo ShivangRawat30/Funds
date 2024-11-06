@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
-import { MdSunnySnowing } from 'react-icons/md'
+import { FaHandsHelping } from "react-icons/fa";
 
-const IMAGE_BANNER = 'https://cdn.pixabay.com/photo/2016/11/14/04/14/monks-1822569_1280.jpg'
+const IMAGE_BANNER = 'https://images.unsplash.com/photo-1721390017772-12182f8b685b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 const Banner: React.FC<{ mine?: boolean }> = ({ mine }) => {
   return (
     <div
@@ -14,7 +14,7 @@ const Banner: React.FC<{ mine?: boolean }> = ({ mine }) => {
       <div className="flex flex-col justify-end text-white p-8 space-y-8 relative z-10 h-80">
         {!mine ? (
           <h1 className="text-7xl text-center font-semibold">
-            Your Home <br /> for Help
+            Compassion Knows  <br /> No Borders.
           </h1>
         ) : (
           <h1 className="text-7xl text-center font-semibold">
@@ -23,12 +23,12 @@ const Banner: React.FC<{ mine?: boolean }> = ({ mine }) => {
         )}
         <Link
           href={'/donations/create'}
-          className="bg-white text-green-600 px-4 space-x-1
+          className="bg-white text-[#a75891] px-4 space-x-1
         flex justify-center items-center rounded-full text-center py-3
-        transition duration-300 ease-in-out hover:bg-green-600 hover:text-white"
+        transition duration-300 ease-in-out hover:bg-[#a75891] hover:text-white"
         >
-          <MdSunnySnowing size={25} />
-          <span>Start a Dapp Fund</span>
+          <FaHandsHelping size={25} />
+          <span>Open Arms for Someone</span>
         </Link>
       </div>
     </div>
